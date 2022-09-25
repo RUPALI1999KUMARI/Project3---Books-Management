@@ -75,13 +75,15 @@ let getBook = async (req, res) => {
     try {
         let filterBook = req.query
         if (filterBook.userId) {
-            if (!mongoose.Types.ObjectId.isValid(filterBook.userId)) return res.status(400).send({ status: false, message: 'Invalid UserId Format' })
+            if (!mongoose.Types.ObjectId.isValid(filterBook.userId)) 
+            return res.status(400).send({ status: false, message: 'Invalid UserId Format' })
         }
         if (filterBook.subcategory) {
             filterBook.subcategory = { $in: filterBook.subcategory.split(',') };
         }
         let data = await bookModel.find({ $and: [filterBook, { isDeleted: false }] }).select({ title: 1, excerpt: 1, category: 1, releasedAt: 1, userId: 1, reviews: 1 }).sort({ title: 1 })
-        if (Object.keys(data).length == 0) return res.status(404).send({ status: false, message: 'Book not found' })
+        if (Object.keys(data).length == 0) 
+        return res.status(404).send({ status: false, message: 'Book not found' })
         res.status(200).send({ status: true, message: 'Book list', data: data })
     }
     catch (err) {
@@ -131,9 +133,11 @@ const getBookById = async function (req, res) {
 const updateBook = async function (req, res) {
     try {
         const bookData = req.body
-        if (!validateBody.isValidRequestBody(bookData)) { return res.status(404).send({ status: false, msg: "Please provide Data" }) }
+        if (!validateBody.isValidRequestBody(bookData)) 
+        { return res.status(404).send({ status: false, msg: "Please provide Data" }) }
         let BOOK = req.params.bookId
-        if (!mongoose.Types.ObjectId.isValid(BOOK)) { return res.status(404).send({ status: false, data: "ID not Found in path param" }) }
+        if (!mongoose.Types.ObjectId.isValid(BOOK)) 
+        { return res.status(404).send({ status: false, data: "ID not Found in path param" }) }
         let book = await bookModel.findOneAndUpdate(
             { _id: BOOK },
             {
