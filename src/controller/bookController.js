@@ -96,8 +96,12 @@ let getBook = async (req, res) => {
 
 const getBookById = async function (req, res) {
     try {
-        bookId = req.params.bookId
+         let bookId = req.params.bookId
 
+        if (bookId) {
+            if (!mongoose.Types.ObjectId.isValid(bookId)) 
+            return res.status(400).send({ status: false, message: 'Invalid bookId Format' })
+        }
         if (!bookId) {
             return res.status(400).send({ status: false, message: "Please enter bookId" })
         }
